@@ -129,8 +129,8 @@ const CompanySearchBar = () => {
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 bg-white rounded-lg shadow-xl/20">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-2">
+    <div className="w-full max-w-5xl mx-auto p-4 bg-white rounded-full  shadow-xl">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center mx-2 md:gap-2">
         {/* Company Type */}
         <div className="flex-1">
           <Autocomplete
