@@ -1,267 +1,240 @@
+// "use client"
+
+// import React from "react"
+// import { useCompanyStore } from "@/store/company-store"
+
+// const CompanySearchBar = () => {
+//   const { filters, setFilters, services, setFilteredServices } = useCompanyStore()
+
+//   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     const { name, value } = e.target
+//     setFilters({ ...filters, [name]: value })
+//   }
+
+//   const handleSearch = () => {
+//     const filtered = services.filter((service) => {
+//       const matchesCompanyType =
+//         !filters.companyType || service?.companyType.toLowerCase().includes(filters.companyType.toLowerCase())
+    
+//       const matchesRegion =
+//         !filters.region || service.region.toLowerCase().includes(filters.region.toLowerCase())
+    
+//       // const matchesCompletion =
+//       //   !filters.completionDate || service.completionTime.toLowerCase().includes(filters.completionDate.toLowerCase())
+    
+//         return matchesCompanyType && matchesRegion
+//     })
+    
+//     console.log(filtered, 'filtered')
+
+//     setFilteredServices(filtered)
+//   }
+
+//   return (
+//     <div className="flex flex-col gap-2 p-4 bg-gray-50 rounded-md shadow-sm">
+//       <select
+//         name="companyType"
+//         value={filters.companyType}
+//         onChange={handleChange}
+//         className="border p-2 rounded"
+//       >
+//         <option value="">Select Company Type</option>
+//         <option value="Private Limited (SDN BHD)">Private Limited (SDN BHD)</option>
+//         <option value="Public Limited (BHD)">Public Limited (BHD)</option>
+//         <option value="Limited Liability Partnership (LLP)">LLP</option>
+//         <option value="Sole Proprietorship">Sole Proprietorship</option>
+//       </select>
+
+//       <select
+//         name="region"
+//         value={filters.region}
+//         onChange={handleChange}
+//         className="border p-2 rounded"
+//       >
+//         <option value="">Select Region</option>
+//         <option value="Peninsular Malaysia">Peninsular Malaysia</option>
+//         <option value="Sabah & Sarawak">East Malaysia (Sabah & Sarawak)</option>
+//         <option value="Labuan">Labuan</option>
+//         <option value="Langkawi">Langkawi</option>
+//       </select>
+
+//       <select
+//         name="completionDate"
+//         value={filters.completionDate}
+//         onChange={handleChange}
+//         className="border p-2 rounded"
+//       >
+//         <option value="">Select Completion Date</option>
+//         <option value="17th Feb (3 Days)">17th Feb (3 Days)</option>
+//         <option value="20th Feb (6 Days)">20th Feb (6 Days)</option>
+//         <option value="24th Feb (10 Days)">24th Feb (10 Days)</option>
+//         <option value="1st Mar (15 Days)">1st Mar (15 Days)</option>
+//       </select>
+
+//       <button
+//         onClick={handleSearch}
+//         className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//       >
+//         Search
+//       </button>
+//     </div>
+//   )
+// }
+
+// export default CompanySearchBar
+
 "use client"
 
-import type React from "react"
-
-import { useState, useRef, useEffect } from "react"
+import React from "react"
+import { Autocomplete, TextField } from "@mui/material"
+import { FaSearch } from "react-icons/fa"
 import { useCompanyStore } from "@/store/company-store"
 
-export function CompanySearchBar() {
-  const { filters, setFilters, searchSuggestions, getSearchSuggestions } = useCompanyStore()
+const companyTypeOptions = [
+  "Private Limited (SDN BHD)",
+  "Public Limited (BHD)",
+  "Limited Liability Partnership (LLP)",
+  "Sole Proprietorship",
+]
 
-  const [isCompanyTypeOpen, setIsCompanyTypeOpen] = useState(false)
-  const [isRegionOpen, setIsRegionOpen] = useState(false)
-  const [isDateOpen, setIsDateOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [showSuggestions, setShowSuggestions] = useState(false)
+const regionOptions = [
+  "Peninsular Malaysia",
+  "Sabah & Sarawak",
+  "Labuan",
+  "Langkawi",
+]
 
-  const companyTypeRef = useRef<HTMLDivElement>(null)
-  const regionRef = useRef<HTMLDivElement>(null)
-  const dateRef = useRef<HTMLDivElement>(null)
-  const searchRef = useRef<HTMLDivElement>(null)
+const completionDateOptions = [
+  "17th Feb (3 Days)",
+  "20th Feb (6 Days)",
+  "24th Feb (10 Days)",
+  "1st Mar (15 Days)",
+]
 
-  // Filter suggestions based on search term
-  const filteredSuggestions =
-    searchTerm.trim() === ""
-      ? []
-      : searchSuggestions.filter((suggestion) => suggestion.toLowerCase().includes(searchTerm.toLowerCase()))
+const CompanySearchBar = () => {
+  const { filters, setFilters, services, setFilteredServices } = useCompanyStore()
 
-  // Handle clicks outside the dropdowns
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (companyTypeRef.current && !companyTypeRef.current.contains(event.target as Node)) {
-        setIsCompanyTypeOpen(false)
-      }
-      if (regionRef.current && !regionRef.current.contains(event.target as Node)) {
-        setIsRegionOpen(false)
-      }
-      if (dateRef.current && !dateRef.current.contains(event.target as Node)) {
-        setIsDateOpen(false)
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false)
-      }
-    }
+  const handleSearch = () => {
+    const filtered = services.filter((service) => {
+      const matchesCompanyType =
+        !filters.companyType || service?.companyType.toLowerCase().includes(filters.companyType.toLowerCase())
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      const matchesRegion =
+        !filters.region || service.region.toLowerCase().includes(filters.region.toLowerCase())
 
-  // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchTerm(value)
-    setShowSuggestions(true)
+      return matchesCompanyType && matchesRegion
+    })
+
+    setFilteredServices(filtered)
   }
 
-  // Handle suggestion selection
-  const handleSelectSuggestion = (suggestion: string) => {
-    setSearchTerm(suggestion)
-    setShowSuggestions(false)
-  }
-
-  // Handle company type selection
-  const handleSelectCompanyType = (type: string) => {
-    setFilters({ companyType: type })
-    setIsCompanyTypeOpen(false)
-  }
-
-  // Handle region selection
-  const handleSelectRegion = (region: string) => {
-    setFilters({ region })
-    setIsRegionOpen(false)
-  }
-
-  // Handle completion date selection
-  const handleSelectDate = (date: string) => {
-    setFilters({ completionDate: date })
-    setIsDateOpen(false)
+  const handleAutocompleteChange = (name: string, value: string | null) => {
+    setFilters({ ...filters, [name]: value || "" })
   }
 
   return (
-    <div className="mt-6 rounded-full border border-gray-200 bg-white p-2 shadow-sm">
-      <div className="flex flex-col md:flex-row">
-        {/* Company Type Dropdown */}
-        <div
-          ref={companyTypeRef}
-          className="relative flex-1 border-b md:border-b-0 md:border-r border-gray-200 p-4 cursor-pointer"
-          onClick={() => setIsCompanyTypeOpen(!isCompanyTypeOpen)}
-        >
-          <div className="text-sm text-gray-500">Company Type</div>
-          <div className="flex items-center justify-between">
-            <div className="font-medium">{filters.companyType}</div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-500"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </div>
-
-          {isCompanyTypeOpen && (
-            <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md bg-white p-2 shadow-lg border border-gray-200">
-              {[
-                "Private Limited (SDN BHD)",
-                "Public Limited (BHD)",
-                "Limited Liability Partnership (LLP)",
-                "Sole Proprietorship",
-              ].map((type) => (
-                <div
-                  key={type}
-                  className="cursor-pointer rounded px-4 py-2 text-sm hover:bg-gray-100"
-                  onClick={() => handleSelectCompanyType(type)}
-                >
-                  {type}
-                </div>
-              ))}
-            </div>
-          )}
+    <div className="w-full max-w-5xl mx-auto p-4 bg-white rounded-lg shadow-xl/20">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-2">
+        {/* Company Type */}
+        <div className="flex-1">
+          <Autocomplete
+            options={companyTypeOptions}
+            value={filters.companyType}
+            onChange={(_, newValue) => handleAutocompleteChange("companyType", newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Company Type"
+                variant="filled"
+                size="small"
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  "& .MuiFilledInput-root": {
+                    borderRadius: "8px",
+                    paddingTop: "10px",
+                  },
+                }}
+              />
+            )}
+          />
         </div>
 
-        {/* Region Dropdown */}
-        <div
-          ref={regionRef}
-          className="relative flex-1 border-b md:border-b-0 md:border-r border-gray-200 p-4 cursor-pointer"
-          onClick={() => setIsRegionOpen(!isRegionOpen)}
-        >
-          <div className="text-sm text-gray-500">Region</div>
-          <div className="flex items-center justify-between">
-            <div className="font-medium">{filters.region}</div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-500"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </div>
-
-          {isRegionOpen && (
-            <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md bg-white p-2 shadow-lg border border-gray-200">
-              {["Peninsular Malaysia (Mainland)", "East Malaysia (Sabah & Sarawak)", "Labuan", "Langkawi"].map(
-                (region) => (
-                  <div
-                    key={region}
-                    className="cursor-pointer rounded px-4 py-2 text-sm hover:bg-gray-100"
-                    onClick={() => handleSelectRegion(region)}
-                  >
-                    {region}
-                  </div>
-                ),
-              )}
-            </div>
-          )}
+        {/* Region */}
+        <div className="flex-1">
+          <Autocomplete
+            options={regionOptions}
+            value={filters.region}
+            onChange={(_, newValue) => handleAutocompleteChange("region", newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Region"
+                variant="filled"
+                size="small"
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  "& .MuiFilledInput-root": {
+                    borderRadius: "8px",
+                    paddingTop: "10px",
+                  },
+                }}
+              />
+            )}
+          />
         </div>
 
-        {/* Completion Date Dropdown */}
-        <div ref={dateRef} className="relative flex-1 p-4 cursor-pointer" onClick={() => setIsDateOpen(!isDateOpen)}>
-          <div className="text-sm text-gray-500">Date of completion</div>
-          <div className="flex items-center justify-between">
-            <div className="font-medium">{filters.completionDate}</div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-gray-500"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </div>
-
-          {isDateOpen && (
-            <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md bg-white p-2 shadow-lg border border-gray-200">
-              {["17th Feb (3 Days)", "20th Feb (6 Days)", "24th Feb (10 Days)", "1st Mar (15 Days)"].map((date) => (
-                <div
-                  key={date}
-                  className="cursor-pointer rounded px-4 py-2 text-sm hover:bg-gray-100"
-                  onClick={() => handleSelectDate(date)}
-                >
-                  {date}
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Completion Date */}
+        <div className="flex-1">
+          <Autocomplete
+            options={completionDateOptions}
+            value={filters.completionDate}
+            onChange={(_, newValue) => handleAutocompleteChange("completionDate", newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Completion Date"
+                variant="filled"
+                size="small"
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  "& .MuiFilledInput-root": {
+                    borderRadius: "8px",
+                    paddingTop: "10px",
+                  },
+                }}
+              />
+            )}
+          />
         </div>
 
         {/* Search Button */}
-        <div className="p-2 relative" ref={searchRef}>
+        <div className="w-full md:w-auto">
           <button
-            onClick={() => setShowSuggestions(!showSuggestions)}
-            className="h-full w-full rounded-full bg-blue-900 px-6 py-2 text-white hover:bg-navy-900 flex items-center justify-center"
+            onClick={handleSearch}
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#0E2C59] text-white font-medium rounded-full px-6 py-2 shadow-sm hover:bg-[#0b2349] transition"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mr-2 h-4 w-4"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
+            <FaSearch className="text-sm" />
             Search
           </button>
-
-          {showSuggestions && (
-            <div className="absolute right-0 top-full z-10 mt-2 w-72 rounded-md bg-white p-4 shadow-lg border border-gray-200">
-              <div className="mb-4">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  placeholder="Search..."
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-navy-800 focus:outline-none focus:ring-1 focus:ring-navy-800"
-                />
-              </div>
-
-              {filteredSuggestions.length > 0 ? (
-                <div className="max-h-60 overflow-y-auto">
-                  {filteredSuggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className="cursor-pointer rounded px-3 py-2 text-sm hover:bg-gray-100"
-                      onClick={() => handleSelectSuggestion(suggestion)}
-                    >
-                      {suggestion}
-                    </div>
-                  ))}
-                </div>
-              ) : searchTerm.trim() !== "" ? (
-                <div className="py-2 text-sm text-gray-500">No results found</div>
-              ) : (
-                <div className="py-2 text-sm text-gray-500">Type to search</div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
   )
 }
+
+export default CompanySearchBar

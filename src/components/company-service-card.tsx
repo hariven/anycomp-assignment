@@ -5,12 +5,14 @@ interface CompanyServiceCardProps {
   name: string
   description: string
   rating: number
-  price: number
+  price: number | string
   completionTime: string
   clients: number
   logo: string
   offer: string
   secretary?: boolean
+  companyType?: string
+  region?: string
 }
 
 export function CompanyServiceCard({
@@ -22,7 +24,6 @@ export function CompanyServiceCard({
   clients,
   logo,
   offer,
-  secretary = false,
 }: CompanyServiceCardProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -63,7 +64,7 @@ export function CompanyServiceCard({
         </div>
         <div className="flex gap-2">
           <Button className="flex-1 rounded-md border-gray-300">Message</Button>
-          <Button className="flex-1 rounded-md bg-blue-800 hover:bg-navy-900 rounded">
+          <Button className="flex-1 rounded-md bg-blue-800  rounded">
           <span className="bg-blue-900 p-2 rounded-4xl text-white px-4">Incorporate</span>
 
           </Button>
