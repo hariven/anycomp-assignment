@@ -43,7 +43,10 @@ export default function Home() {
       <div className="container mx-auto px-4 py-6">
         <CompanySearchBar />
 
-        <div className="mt-8">
+        <br />
+        <hr className="border-gray-300"/>
+
+        <div className="mt-4">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
