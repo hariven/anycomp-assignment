@@ -1,13 +1,11 @@
+"use client";
 
-"use client"
-
-import CompanySearchBar from "@/components/company-search-bar"
-import { CompanyServiceCard } from "@/components/company-service-card"
-import { MainNavigation } from "@/components/main-navigation"
-import { useCompanyStore } from "@/store/company-store"
+import CompanySearchBar from "@/components/company-search-bar";
+import { CompanyServiceCard } from "@/components/company-service-card";
+import { MainNavigation } from "@/components/main-navigation";
+import { useCompanyStore } from "@/store/company-store";
 
 export interface CompanyServiceCardProps {
-
   name: string;
 
   description: string;
@@ -29,14 +27,14 @@ export interface CompanyServiceCardProps {
   region?: string;
 
   secretary?: boolean;
-
 }
 
 export default function Home() {
-  const filteredCompanies = useCompanyStore((state) => state.filteredServices)
-  const services = useCompanyStore((state) => state.services)
+  const filteredCompanies = useCompanyStore((state) => state.filteredServices);
+  const services = useCompanyStore((state) => state.services);
 
-  const displayedCompanies = filteredCompanies.length > 0 ? filteredCompanies : services
+  const displayedCompanies =
+    filteredCompanies.length > 0 ? filteredCompanies : services;
 
   // console.log("Filtered companies:", displayedCompanies)
   return (
@@ -48,8 +46,12 @@ export default function Home() {
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Incorporate new company</h1>
-              <p className="text-gray-600">Over 350 Company Secretaries ready to assist you</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Incorporate new company
+              </h1>
+              <p className="text-gray-600">
+                Over 350 Company Secretaries ready to assist you
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
@@ -111,11 +113,13 @@ export default function Home() {
                 />
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500">No companies found.</p>
+              <p className="col-span-full text-center text-gray-500">
+                No companies found.
+              </p>
             )}
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
