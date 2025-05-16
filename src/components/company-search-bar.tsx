@@ -92,16 +92,12 @@ import { useCompanyStore } from "@/store/company-store"
 
 const companyTypeOptions = [
   "Private Limited (SDN BHD)",
-  "Public Limited (BHD)",
   "Limited Liability Partnership (LLP)",
-  "Sole Proprietorship",
 ]
 
 const regionOptions = [
   "Peninsular Malaysia",
   "Sabah & Sarawak",
-  "Labuan",
-  "Langkawi",
 ]
 
 const completionDateOptions = [
