@@ -38,8 +38,6 @@ export default function Home() {
 
   const displayedCompanies = filteredCompanies.length > 0 ? filteredCompanies : services
 
-  console.log("AfilteredCompanies", filteredCompanies)
-
   // console.log("Filtered companies:", displayedCompanies)
   return (
     <main className="min-h-screen bg-white">
